@@ -37,4 +37,28 @@
     </ul>
   </li>
 
+  @if (Auth::user()->hasRole("admin"))
+    <li class="menu-title">Administration</li>
+    <li>
+      <a href="/">
+        <i data-feather="home"></i>
+        <span> Posts </span>
+      </a>
+    </li>
+
+    <li>
+      <a href="{{ route("students.list") }}">
+        <i data-feather="home"></i>
+        <span> Students </span>
+      </a>
+    </li>
+
+    <li>
+      <a href="/">
+        <i data-feather="home"></i>
+        <span> Posts </span>
+      </a>
+    </li>
+  @endif
+
 </ul>

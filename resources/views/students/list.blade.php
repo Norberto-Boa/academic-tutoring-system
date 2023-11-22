@@ -91,14 +91,23 @@
   <div class="row">
     @foreach ($students as $student)
       <div class="col-md-3 col xl-3">
-        <a href="#" class="card">
+        <a class="card cursor-pointer">
           <div class="card-body p-0">
             <div class="media p-3">
-              <div class="media-body">
-                <span class="text-muted text-uppercase font-size-12 font-weight-bold">
-                  {{ $student->email }}
-                </span>
-                <h2 class="mb-0 text-capitalize">{{ $student->name }}</h2>
+              <div class="media-body d-flex justify-content-between align-items-center">
+                <h2 class="mb-0 text-capitalize" style="cursor: pointer"
+                  onclick='showDetailsModal({{ $student->id }},@json($student->name),@json($student->email),@json($student->phone_number))'>
+                  {{ $student->name }}</h2>
+                <div>
+                  <button href="#" class="btn btn-info font-size-11 p-1">
+                    <i class="uil uil-edit-alt"></i>
+                  </button>
+                  <button href="#" class="btn btn-danger font-size-11 p-1"
+                    onclick='showDeleteModal({{ $student->id }},@json($student->name))'>
+
+                    <i class="uil uil-trash"></i>
+                  </button>
+                </div>
               </div>
               <div class="align-self-center">
                 <div id="today-revenue-chart" class="apex-charts"></div>
@@ -111,5 +120,81 @@
       </div>
     @endforeach
 
+    <!-- Details Modal -->
+    <div class="modal fade" id="studentDetails" tabindex="-1" aria-labelledby="studentName" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="studentName"></h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+
+            {{-- Name --}}
+            <p class="d-flex justify-content-between">
+              <span class="font-weight-bold">Name</span>
+              <span id="stuName"></span>
+            </p>
+
+            {{-- Email --}}
+            <p class="d-flex justify-content-between">
+              <span class="font-weight-bold">Email</span>
+              <span id="stuEmail"></span>
+            </p>
+
+            {{-- Phone Number --}}
+            <p class="d-flex justify-content-between">
+              <span class="font-weight-bold">Phone Number</span>
+              <span id="stuNumber"></span>
+            </p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary">Save changes</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="deleteStudent" tabindex="-1" aria-labelledby="deleteStudentLabel"
+      aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="StudentName"></h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <p>Tem certeza que pretende apagar o aluno <strong id="StuName"></strong>?</p>
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+            <button type="button" class="btn btn-danger">Delete Student</button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
+
+  <script>
+    function showDetailsModal(studentId, studentName, studentEmail, studentNumber) {
+      document.getElementById('studentName').innerHTML = studentName;
+      document.getElementById('stuName').innerHTML = studentName;
+      document.getElementById('stuEmail').innerHTML = studentEmail;
+      document.getElementById('stuNumber').innerHTML = studentNumber;
+      $("#studentDetails").modal('show');
+    }
+
+    function showDeleteModal(studentId, studentName) {
+      document.getElementById('StudentName').innerHTML = studentName;
+      document.getElementById('StuName').innerHTML = studentName;
+      $("#deleteStudent").modal('show');
+    }
+  </script>
 @endsection

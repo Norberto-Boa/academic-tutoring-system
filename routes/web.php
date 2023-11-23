@@ -22,6 +22,8 @@ Route::get('/', function () {
 Route::middleware(['auth'])->group(function () {
   Route::get('/students/list', [StudentController::class, 'index'])->name('students.list');
   Route::post('/student/create', [StudentController::class, 'store'])->name('students.create');
+  Route::post('/student/edit', [StudentController::class, 'update'])->name('students.update');
+  Route::post('/student/delete', [StudentController::class, 'destroy'])->name('students.destroy');
 });
 
 Auth::routes();

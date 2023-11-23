@@ -33,7 +33,7 @@
   {{-- Line Divider  --}}
   <div style="height: 2px" class="bg-white rounded w-100 mb-4"></div>
 
-  <!-- Modal -->
+  <!-- Create Modal -->
   <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
@@ -99,9 +99,11 @@
                   onclick='showDetailsModal({{ $student->id }},@json($student->name),@json($student->email),@json($student->phone_number))'>
                   {{ $student->name }}</h2>
                 <div>
-                  <button href="#" class="btn btn-info font-size-11 p-1">
+                  <button href="#" class="btn btn-info font-size-11 p-1"
+                    onclick= 'editStudentModal({{ $student->id }},@json($student->name),@json($student->email),@json($student->phone_number))'>
                     <i class="uil uil-edit-alt"></i>
                   </button>
+
                   <button href="#" class="btn btn-danger font-size-11 p-1"
                     onclick='showDeleteModal({{ $student->id }},@json($student->name))'>
 
@@ -150,15 +152,14 @@
               <span id="stuNumber"></span>
             </p>
           </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary">Save changes</button>
+          <div class="modal-footer justify-content-center">
+            <button type="button" class="btn btn-info w-50" data-dismiss="modal">Close</button>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Modal -->
+    <!-- Delete Modal -->
     <div class="modal fade" id="deleteStudent" tabindex="-1" aria-labelledby="deleteStudentLabel"
       aria-hidden="true">
       <div class="modal-dialog">
@@ -175,11 +176,69 @@
 
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-            <button type="button" class="btn btn-danger">Delete Student</button>
+            <form action="" id="studentRemovalForm" method="POST">
+              @csrf
+              <input type="hidden" name="student_id" id="removeStudentId">
+              <button type="submit" class="btn btn-danger">Delete Student</button>
+            </form>
           </div>
         </div>
       </div>
     </div>
+
+    {{-- Edit Modal --}}
+    <div class="modal fade" id="editStudent" tabindex="-1" aria-labelledby="deleteStudentLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="editTitle"></h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form action="" method="POST" id="editStudentForm">
+              @csrf
+              {{-- Phone Number Input --}}
+              <div class="form-group">
+                <label for="editName">Name</label>
+                <input type="text" class="form-control" name="name" id="editName"
+                  placeholder="Example: John Doe">
+              </div>
+
+              {{-- Email Input --}}
+              <div class="form-group">
+                <label for="editEmail">Email address</label>
+                <input type="email" class="form-control" name="email" id="editEmail" aria-describedby="emailHelp"
+                  placeholder="example@ustm.ac.mz">
+                {{-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone
+                else.
+                </small> 
+                --}}
+              </div>
+
+              {{-- Phone Number Input --}}
+              <div class="form-group">
+                <label for="editPhone_number">Phone Number</label>
+                <div class="input-group mb-2">
+                  <div class="input-group-prepend">
+                    <div class="input-group-text">+258</div>
+                  </div>
+                  <input type="text" class="form-control" id="editPhone_number" name="phone_number"
+                    placeholder="84 000 0000">
+                </div>
+              </div>
+
+              <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                <button type="submit" class="btn btn-primary">Create Student</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div>
 
   <script>
@@ -192,9 +251,26 @@
     }
 
     function showDeleteModal(studentId, studentName) {
+      var form = document.getElementById('studentRemovalForm');
+
+      form.action = "{{ route("students.destroy") }}";
+
+      document.getElementById('removeStudentId').value = studentId;
       document.getElementById('StudentName').innerHTML = studentName;
       document.getElementById('StuName').innerHTML = studentName;
       $("#deleteStudent").modal('show');
+    }
+
+    function editStudentModal(studentId, studentName, studentEmail, studentPhone) {
+      var form = document.getElementById('editStudentForm');
+
+      form.action = "{{ route("students.update") }}";
+
+      document.getElementById('editTitle').innerHTML = `Edit student of name ${studentName}`
+      document.getElementById('editName').value = studentName;
+      document.getElementById('editEmail').value = studentEmail;
+      document.getElementById('editPhone_number').value = studentPhone;
+      $("#editStudent").modal('show');
     }
   </script>
 @endsection

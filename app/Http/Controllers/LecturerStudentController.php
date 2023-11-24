@@ -3,16 +3,22 @@
 namespace App\Http\Controllers;
 
 use App\Models\LecturerStudent;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class LecturerStudentController extends Controller
 {
   /**
    * Display a listing of the resource.
+   * @param \Illuminate\Http\Response
    */
   public function index()
   {
-    //
+    $projects = LecturerStudent::all();
+    $students = User::role('student')->get();
+    $lecturers = User::role('lecturer')->get();
+
+    return response(view('projects.list', compact('projects', 'lecturers', 'students')));
   }
 
 

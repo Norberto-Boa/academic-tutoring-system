@@ -1,7 +1,9 @@
 <?php
 
 use App\Http\Controllers\LecturerController;
+use App\Http\Controllers\LecturerStudentController;
 use App\Http\Controllers\StudentController;
+use App\Models\LecturerStudent;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
@@ -29,16 +31,13 @@ Route::middleware(['auth'])->group(function () {
   Route::post('/student/delete', [StudentController::class, 'destroy'])->name('students.destroy');
 
   // Lecturers Controller
-  Route::get(
-    '/lecturers/list',
-    [LecturerController::class, 'index']
-  )->name('lecturers.list');
+  Route::get('/lecturers/list', [LecturerController::class, 'index'])->name('lecturers.list');
   Route::post('/lecturer/create', [LecturerController::class, 'store'])->name('lecturers.create');
-  Route::post(
-    '/lecturer/edit',
-    [LecturerController::class, 'update']
-  )->name('lecturers.update');
+  Route::post('/lecturer/edit', [LecturerController::class, 'update'])->name('lecturers.update');
   Route::post('/lecturer/delete', [LecturerController::class, 'destroy'])->name('lecturers.destroy');
+
+  // Projects Controller
+  Route::get('/projects/list', [LecturerStudentController::class, 'index'])->name('projects.list');
 });
 
 Auth::routes();

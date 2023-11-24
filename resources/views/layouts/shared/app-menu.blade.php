@@ -54,7 +54,7 @@
     </li>
 
     <li>
-      <a href="/">
+      <a href="{{ route("projects.list") }}">
         <i data-feather="book"></i>
         <span> Projects </span>
       </a>

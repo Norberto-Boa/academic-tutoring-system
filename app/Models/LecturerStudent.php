@@ -17,6 +17,11 @@ class LecturerStudent extends Model
    */
   protected $table = 'lecturer_student';
 
+  /**
+   * The attributes that are mass assignable.
+   *
+   * @var array<int, string>
+   */
   protected $fillable = [
     'lecturer_id',
     'student_id',

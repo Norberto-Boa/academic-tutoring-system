@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\LecturerController;
 use App\Http\Controllers\StudentController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
@@ -20,10 +21,24 @@ Route::get('/', function () {
 });
 
 Route::middleware(['auth'])->group(function () {
+
+  // Students Controller
   Route::get('/students/list', [StudentController::class, 'index'])->name('students.list');
   Route::post('/student/create', [StudentController::class, 'store'])->name('students.create');
   Route::post('/student/edit', [StudentController::class, 'update'])->name('students.update');
   Route::post('/student/delete', [StudentController::class, 'destroy'])->name('students.destroy');
+
+  // Lecturers Controller
+  Route::get(
+    '/lecturers/list',
+    [LecturerController::class, 'index']
+  )->name('lecturers.list');
+  Route::post('/lecturer/create', [LecturerController::class, 'store'])->name('lecturers.create');
+  Route::post(
+    '/lecturer/edit',
+    [LecturerController::class, 'update']
+  )->name('lecturers.update');
+  Route::post('/lecturer/delete', [LecturerController::class, 'destroy'])->name('lecturers.destroy');
 });
 
 Auth::routes();

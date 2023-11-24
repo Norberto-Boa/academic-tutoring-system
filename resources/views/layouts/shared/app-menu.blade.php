@@ -40,23 +40,23 @@
   @if (Auth::user()->hasRole("admin"))
     <li class="menu-title">Administration</li>
     <li>
-      <a href="/">
-        <i data-feather="home"></i>
-        <span> Posts </span>
+      <a href="{{ route("lecturers.list") }}">
+        <i data-feather="users"></i>
+        <span> Lecturers </span>
       </a>
     </li>
 
     <li>
       <a href="{{ route("students.list") }}">
-        <i data-feather="home"></i>
+        <i data-feather="user"></i>
         <span> Students </span>
       </a>
     </li>
 
     <li>
       <a href="/">
-        <i data-feather="home"></i>
-        <span> Posts </span>
+        <i data-feather="book"></i>
+        <span> Projects </span>
       </a>
     </li>
   @endif

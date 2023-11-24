@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
@@ -24,7 +25,8 @@ class HomeController extends Controller
   public function index()
   {
     $user = Auth::user();
+    $lecturers = User::role('lecturer')->get();
 
-    return view('dashboard', compact('user'));
+    return view('dashboard', compact('user', 'lecturers'));
   }
 }

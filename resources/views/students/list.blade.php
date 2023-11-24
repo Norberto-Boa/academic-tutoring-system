@@ -12,6 +12,18 @@
     </div>
   @endif
 
+  @if (session("warning"))
+    <div class="alert alert-warning text-center font-bold">
+      {{ session("warning") }}
+    </div>
+  @endif
+
+  @if (session("error"))
+    <div class="alert alert-warning text-center font-bold">
+      {{ session("error") }}
+    </div>
+  @endif
+
   <div class="row page-title align-items-center">
     <div class="col-sm-4 col-xl-6">
       <h4 class="mb-1 mt-0">Students</h4>
@@ -165,7 +177,7 @@
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="StudentName"></h5>
+            <h5 class="modal-title text-capitalize" id="StudentName"></h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
@@ -199,7 +211,9 @@
           <div class="modal-body">
             <form action="" method="POST" id="editStudentForm">
               @csrf
-              {{-- Phone Number Input --}}
+
+              <input type="hidden" name="id" id="editId">
+              {{-- Name Input --}}
               <div class="form-group">
                 <label for="editName">Name</label>
                 <input type="text" class="form-control" name="name" id="editName"
@@ -231,7 +245,7 @@
 
               <div class="modal-footer">
                 <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
-                <button type="submit" class="btn btn-primary">Create Student</button>
+                <button type="submit" class="btn btn-primary">Edit Student</button>
               </div>
             </form>
           </div>
@@ -266,6 +280,7 @@
 
       form.action = "{{ route("students.update") }}";
 
+      document.getElementById('editId').value = studentId;
       document.getElementById('editTitle').innerHTML = `Edit student of name ${studentName}`
       document.getElementById('editName').value = studentName;
       document.getElementById('editEmail').value = studentEmail;

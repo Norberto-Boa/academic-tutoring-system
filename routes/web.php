@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LecturerController;
 use App\Http\Controllers\LecturerStudentController;
 use App\Http\Controllers\StudentController;
@@ -24,6 +25,8 @@ Route::get('/', function () {
 
 Route::middleware(['auth'])->group(function () {
 
+  Route::get('/dashboard', [HomeController::class, 'index'])->name('dashboard');
+
   // Students Controller
   Route::get('/students/list', [StudentController::class, 'index'])->name('students.list');
   Route::post('/student/create', [StudentController::class, 'store'])->name('students.create');
@@ -41,5 +44,3 @@ Route::middleware(['auth'])->group(function () {
 });
 
 Auth::routes();
-
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

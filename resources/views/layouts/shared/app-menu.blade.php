@@ -2,7 +2,7 @@
   <li class="menu-title">Navigation</li>
 
   <li>
-    <a href="/">
+    <a href="{{ route("dashboard") }}">
       <i data-feather="home"></i>
       <span class="badge badge-success float-right">1</span>
       <span> Dashboard </span>

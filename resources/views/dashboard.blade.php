@@ -147,7 +147,8 @@
               </button>
             </div>
             <div class="modal-body">
-              <form action="" method="POST" id="editProposalForm">
+              <form action="{{ route("request.update") }}" method="POST" id="editProposalForm"
+                enctype="multipart/form-data">
                 @csrf
                 <input type="hidden" name="id" id="editId">
                 {{-- Topic Input --}}

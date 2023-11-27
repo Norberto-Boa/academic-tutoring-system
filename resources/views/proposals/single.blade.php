@@ -52,23 +52,49 @@
     </div>
 
     <div class="col-12">
-      <a href="{{ asset("storage/proposals/" . $_request->proposal_url . ".pdf") }}" target='_blank'
+      <a href="{{ asset("storage/" . base64_decode($_request->proposal_url)) }}" target='_blank'
         class="btn btn-outline-primary">
         Check the Proposal
       </a>
     </div>
 
-    <div class="col-12 mt-4">
-      <button href="#" class="btn btn-success font-size-16 py-1 px-4" data-toggle="modal"
-        data-target="#acceptanceModal">
-        <i class="uil uil-check"></i> Accept
-      </button>
+    @if ($_request->admin_approval == "pending")
+      <div class="col-12 mt-4">
+        <button href="#" class="btn btn-success font-size-16 py-1 px-4" data-toggle="modal"
+          data-target="#acceptanceModal">
+          <i class="uil uil-check"></i> Accept
+        </button>
 
-      <button href="#" class="btn btn-danger font-size-16 py-1 px-4 ml-2" data-toggle="modal"
-        data-target="#rejectModal">
-        <i class="uil uil-ban"></i> Reject
-      </button>
-    </div>
+        <button href="#" class="btn btn-danger font-size-16 py-1 px-4 ml-2" data-toggle="modal"
+          data-target="#rejectModal">
+          <i class="uil uil-ban"></i> Reject
+        </button>
+      </div>
+    @elseif ($_request->admin_approval == "accepted")
+      <div class="col-12 col-md-4 mt-4">
+        <div class="alert alert-info text-center font-bold">
+          {{ "The Project has been accepted by the administration" }}
+        </div>
+      </div>
+      <div class="col-12 mt-4">
+        <button href="#" class="btn btn-success font-size-16 py-1 px-4" data-toggle="modal"
+          data-target="#reopenRequestModal">
+          <i class="uil uil-check"></i> Reopen the request
+        </button>
+      </div>
+    @elseif($_request->admin_approval == "rejected")
+      <div class="col-12 col-md-4 mt-4">
+        <div class="alert alert-danger text-center font-bold">
+          {{ "The Project has been Rejected by the administration" }}
+        </div>
+      </div>
+      <div class="col-12 mt-4">
+        <button href="#" class="btn btn-success font-size-16 py-1 px-4" data-toggle="modal"
+          data-target="#reopenRequestModal">
+          <i class="uil uil-check"></i> Reopen the request
+        </button>
+      </div>
+    @endif
   </div>
 
   {{-- Acceptance Modal --}}
@@ -87,10 +113,11 @@
         <div class="modal-footer">
 
           <button type="button" class="btn btn-primary" data-dismiss="modal">Cancel</button>
-          <form action="" method="POST">
+          <form action="{{ route("request.feedback") }}" method="POST">
             @csrf
             <input type="hidden" name="id" value="{{ $_request->id }}">
-            <button type="button" class="btn btn-success">Accept</button>
+            <input type="hidden" name="feedback" value="accepted" />
+            <button type="submit" class="btn btn-success">Accept</button>
           </form>
         </div>
       </div>
@@ -113,10 +140,39 @@
         <div class="modal-footer">
 
           <button type="button" class="btn btn-primary" data-dismiss="modal">Cancel</button>
-          <form action="" method="POST">
+          <form action="{{ route("request.feedback") }}" method="POST">
             @csrf
             <input type="hidden" name="id" value="{{ $_request->id }}">
-            <button type="button" class="btn btn-danger">Reject</button>
+            <input type="hidden" name="feedback" value="rejected">
+            <button type="submit" class="btn btn-danger">Reject</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {{-- R-eopen Request Modal --}}
+  <div class="modal fade" id="reopenRequestModal" tabindex="-1" aria-labelledby="reopenRequestModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="reopenRequestModalLabel">Reject the Proposal</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p>You sure you want to re open the proposal?</p>
+        </div>
+        <div class="modal-footer">
+
+          <button type="button" class="btn btn-primary" data-dismiss="modal">Cancel</button>
+          <form action="{{ route("request.feedback") }}" method="POST">
+            @csrf
+            <input type="hidden" name="id" value="{{ $_request->id }}">
+            <input type="hidden" name="feedback" value="pending">
+            <button type="submit" class="btn btn-warning">Re-Open</button>
           </form>
         </div>
       </div>

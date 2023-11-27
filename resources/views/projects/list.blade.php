@@ -229,6 +229,14 @@
       }
     </script>
   @endsection
+@endrole
+
+@role("lecturer")
+  @section("content")
+    @foreach (Auth::user()->isTutoring as $project)
+      <p>{{ $project->topic }}</p>
+    @endforeach
+  @endsection
 @else
   @section("content")
     <div class="alert alert-warning text-center font-bold text-white font-weight-bold">

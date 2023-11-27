@@ -15,14 +15,16 @@ class StudentRequestToAdmin extends Notification
   public $_requestId;
   public $lecturer;
 
+  public $action;
   /**
    * Create a new notification instance.
    */
-  public function __construct($user, $_requestId, $lecturer)
+  public function __construct($user, $_requestId, $lecturer, $action)
   {
     $this->user = $user;
     $this->_requestId = $_requestId;
     $this->lecturer = $lecturer;
+    $this->action = $action;
   }
 
   /**
@@ -42,7 +44,7 @@ class StudentRequestToAdmin extends Notification
   {
     return (new MailMessage)
       ->greeting('Greetings administrator!')
-      ->line('We kindly want to warn you that the student ' . $this->user->name . ' has made a project Proposal!')
+      ->line($this->checkIfIsUpdatingOrSubmitting($this->action))
       ->line('Click the following button to access more information about the proposal!')
       ->action('Check the proposal', url(route('request.showByRequestId', ["id" => $this->_requestId])))
       ->line('Frelimo Hoye!')
@@ -59,5 +61,14 @@ class StudentRequestToAdmin extends Notification
     return [
       //
     ];
+  }
+
+  private function checkIfIsUpdatingOrSubmitting($action)
+  {
+    if ($action == "update") {
+      return "We kindly want to warn you that the student " . $this->user->name . " has made a project Proposal Edit.";
+    } else {
+      return "We kindly want to warn you that the student " . $this->user->name . " has made a project Proposal Submission!";
+    }
   }
 }

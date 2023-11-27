@@ -37,6 +37,23 @@
     </ul>
   </li>
 
+  @if (Auth::user()->hasRole("lecturer"))
+    <li class="menu-title">Administration</li>
+    <li>
+      <a href="{{ route("projects.list") }}">
+        <i data-feather="book"></i>
+        <span> Projects </span>
+      </a>
+    </li>
+
+    <li>
+      <a href="{{ route("request.list") }}">
+        <i data-feather="git-pull-request"></i>
+        <span> Proposals </span>
+      </a>
+    </li>
+  @endif
+
   @if (Auth::user()->hasRole("admin"))
     <li class="menu-title">Administration</li>
     <li>

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\LecturerStudent;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class LecturerStudentController extends Controller
 {
@@ -17,6 +18,7 @@ class LecturerStudentController extends Controller
     $projects = LecturerStudent::all();
     $students = User::role('student')->get();
     $lecturers = User::role('lecturer')->get();
+    dd(Auth::user()->isTutoring);
 
     return response(view('projects.list', compact('projects', 'lecturers', 'students')));
   }

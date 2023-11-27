@@ -3,6 +3,7 @@
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LecturerController;
 use App\Http\Controllers\LecturerStudentController;
+use App\Http\Controllers\RequestsController;
 use App\Http\Controllers\StudentController;
 use App\Models\LecturerStudent;
 use Illuminate\Support\Facades\Route;
@@ -41,6 +42,10 @@ Route::middleware(['auth'])->group(function () {
 
   // Projects Controller
   Route::get('/projects/list', [LecturerStudentController::class, 'index'])->name('projects.list');
+
+  //Request Controller
+  Route::post('/request', [RequestsController::class, 'store'])->name('request.store');
+  Route::get('/request/{id}', [RequestsController::class, 'showByRequestId'])->name('request.showByRequestId');
 });
 
 Auth::routes();

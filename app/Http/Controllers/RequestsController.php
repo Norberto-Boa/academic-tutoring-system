@@ -19,7 +19,7 @@ class RequestsController extends Controller
   {
     $_requests = Requests::all();
 
-    return response(view());
+    return response(view('proposals.list', compact('_requests')));
   }
 
   /**
@@ -96,12 +96,17 @@ class RequestsController extends Controller
     if (!$_request) {
       return redirect()->route('dashboard')->with('warning', 'No request found');
     } else {
-      $student = User::where('studentid', $_request->student_id)->get();
-      $lecturer = User::where('lecturerid', $_request->lecturer_id)->get();
+      $student = User::Find($_request->student_id);
+      $lecturer = User::Find($_request->lecturer_id);
+      // dd($lecturer);
 
-      dd($student);
+      return response(view('proposals.single', compact('_request', 'lecturer', 'student')));
     }
   }
+
+  /**
+   * Update the specified resource according to the admin approval choice
+   */
 
   /**
    * Update the specified resource in storage.

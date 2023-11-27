@@ -59,6 +59,13 @@
         <span> Projects </span>
       </a>
     </li>
+
+    <li>
+      <a href="{{ route("request.list") }}">
+        <i data-feather="git-pull-request"></i>
+        <span> Proposals </span>
+      </a>
+    </li>
   @endif
 
 </ul>

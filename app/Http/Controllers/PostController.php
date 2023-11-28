@@ -88,7 +88,7 @@ class PostController extends Controller
       return redirect()->back()->with('warning', 'Post was not found!');
     }
 
-    return response(view('', compact('post')));
+    return response(view('posts.single', compact('post')));
   }
 
   /**

@@ -57,6 +57,7 @@ Route::middleware(['auth'])->group(function () {
   Route::post('/post/create', [PostController::class, 'store'])->name('post.store');
   Route::post('/post/delete', [PostController::class, 'destroy'])->name('post.destroy');
   Route::post('/post/update', [PostController::class, 'update'])->name('post.update');
+  Route::get('post/{id}', [PostController::class, 'show'])->name('post.show');
 });
 
 Auth::routes();

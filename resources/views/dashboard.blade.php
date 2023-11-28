@@ -75,7 +75,7 @@
             <div class="col-12 mt-2">
               <div class=" py-1 px-4 border border-secondary rounded d-flex justify-content-between align-items-center">
                 <div>
-                  <a href="" class="font-size-22 text-secondary">{{ $post->title }}</a>
+                  <a href="{{ route("post.show", $post->id) }}" class="font-size-22 text-secondary">{{ $post->title }}</a>
                 </div>
 
                 <div>

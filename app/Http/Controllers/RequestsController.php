@@ -107,7 +107,7 @@ class RequestsController extends Controller
   }
 
   /**
-   * Update the specified resource according to the admin approval choice
+   * Update the specified resource according to the admin feedback choice
    * @param Request $request
    * @param \Illuminate\Http\RedirectResponse
    */
@@ -139,6 +139,48 @@ class RequestsController extends Controller
       return redirect()->back()->with('success', 'You have answered the request from the student!');
     } else if ($feedback == "pending") {
       $_request->admin_approval = 'pending';
+      $_request->update();
+      return redirect()->back()->with('success', 'You have answered the request from the student!');
+    }
+
+    return redirect()->back()->with('warning', 'Something went wrong with your feedback.');
+  }
+
+  /**
+   * Update the specified resource according to the lecturer feedback choice
+   * @param Request $request
+   * @param \Illuminate\Http\RedirectResponse
+   */
+
+  public function lecturerFeedback(Request $request)
+  {
+    try {
+      $validator = Validator::make($request->all(), [
+        'id' => ['required', 'integer'],
+        'feedback' => ['required', 'string']
+      ]);
+
+      if ($validator->fails()) {
+        return redirect()->back()->with('warning', 'Something went wrong with your feedback!');
+      }
+    } catch (\Throwable $th) {
+      throw $th;
+    }
+
+    $id = $request->id;
+    $feedback = $request->feedback;
+
+    $_request = Requests::find($id);
+    if ($feedback == "accepted") {
+      $_request->lecturer_approval = 'accepted';
+      $_request->update();
+      return redirect()->back()->with('success', 'You have answered the request from the student!');
+    } else if ($feedback == "rejected") {
+      $_request->lecturer_approval = 'rejected';
+      $_request->update();
+      return redirect()->back()->with('success', 'You have answered the request from the student!');
+    } else if ($feedback == "pending") {
+      $_request->lecturer_approval = 'pending';
       $_request->update();
       return redirect()->back()->with('success', 'You have answered the request from the student!');
     }

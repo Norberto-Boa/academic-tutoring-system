@@ -49,6 +49,7 @@ Route::middleware(['auth'])->group(function () {
   Route::get('/request/{id}', [RequestsController::class, 'showByRequestId'])->name('request.showByRequestId');
   Route::post('/request/update', [RequestsController::class, 'update'])->name('request.update');
   Route::post('/request/feedback', [RequestsController::class, 'adminApproval'])->name('request.feedback');
+  Route::post('/request/lecturer/feedback', [RequestsController::class, 'lecturerFeedback'])->name('request.lecturer.feedback');
 });
 
 Auth::routes();

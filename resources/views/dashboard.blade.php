@@ -64,7 +64,7 @@
               <div class="media p-3">
                 <div class="media-body d-flex justify-content-between align-items-center">
                   <h2 class="mb-0 text-capitalize text-white" style="cursor: pointer"
-                    onclick='showDetailsModal(@json($_request->topic), @json($_request->lecturer_id), @json($_request->admin_approval), @json($_request->lecturer_approval), @json($_request->proposal_url))'>
+                    onclick='showDetailsModal(@json($_request->topic), @json($_request->lecturer->name), @json($_request->admin_approval), @json($_request->lecturer_approval), @json($_request->proposal_url))'>
                     {{ $_request->topic }}
                   </h2>
                   <div>
@@ -241,7 +241,7 @@
         function editProposalModal(requestId, topic, description, lecturer) {
           var form = document.getElementById('editProposal');
 
-          document.getElementById('editTitle').innerHTML = 'Edit proposal ' + requestId;
+          document.getElementById('editTitle').innerHTML = 'Edit proposal ' + topic;
           document.getElementById('editId').value = requestId;
           document.getElementById('editTopic').value = topic;
           document.getElementById('editLecturer').value = lecturer;

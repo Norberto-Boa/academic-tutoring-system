@@ -48,7 +48,7 @@
     </div>
 
     <div class="col-12">
-      <p class="font-weight-bold">Lecturer: <span class="font-weight-normal">{{ $lecturer->name }}</span></p>
+      <p class="font-weight-bold">Student: <span class="font-weight-normal">{{ $_request->student->name }}</span></p>
     </div>
 
     <div class="col-12">
@@ -58,7 +58,8 @@
       </a>
     </div>
 
-    @if ($_request->admin_approval == "pending")
+
+    @if ($_request->lecturer_approval == "pending")
       <div class="col-12 mt-4">
         <button href="#" class="btn btn-success font-size-16 py-1 px-4" data-toggle="modal"
           data-target="#acceptanceModal">
@@ -70,10 +71,26 @@
           <i class="uil uil-ban"></i> Reject
         </button>
       </div>
-    @elseif ($_request->admin_approval == "accepted")
+    @elseif ($_request->lecturer_approval == "accepted" && $_request->admin_approval == "accepted")
       <div class="col-12 col-md-4 mt-4">
         <div class="alert alert-info text-center font-bold">
-          {{ "The Project has been accepted by the administration" }}
+          @role("admin")
+            {{ "The Proposal has been Accepted by the administration and Lecturer" }}
+          @endrole
+          @role("lecturer")
+            {{ "You have Accepted the project from this student" }}
+          @endrole
+        </div>
+      </div>
+    @elseif ($_request->lecturer_approval == "accepted" && $_request->admin_approval == "pending")
+      <div class="col-12 col-md-4 mt-4">
+        <div class="alert alert-info text-center font-bold">
+          @role("admin")
+            {{ "The Project has been Accepted by the administration" }}
+          @endrole
+          @role("lecturer")
+            {{ "You have Accepted the project from this student!" }}
+          @endrole
         </div>
       </div>
       <div class="col-12 mt-4">
@@ -82,17 +99,38 @@
           <i class="uil uil-check"></i> Reopen the request
         </button>
       </div>
-    @elseif($_request->admin_approval == "rejected")
+    @elseif($_request->lecturer_approval == "rejected")
       <div class="col-12 col-md-4 mt-4">
         <div class="alert alert-danger text-center font-bold">
-          {{ "The Project has been Rejected by the administration" }}
+          @role("admin")
+            {{ "The Project has been Rejected by the administration" }}
+          @endrole
+          @role("lecturer")
+            {{ "You have Rejected the project from this student!" }}
+          @endrole
         </div>
       </div>
       <div class="col-12 mt-4">
-        <button href="#" class="btn btn-success font-size-16 py-1 px-4" data-toggle="modal"
-          data-target="#reopenRequestModal">
-          <i class="uil uil-check"></i> Reopen the request
-        </button>
+
+        @role("admin")
+          <button href="#" class="btn btn-success font-size-16 py-1 px-4" data-toggle="modal"
+            data-target="#reopenRequestModal">
+            <i class="uil uil-check"></i> Reopen the request
+          </button>
+        @endrole
+
+        @role("lecturer")
+          @if ($_request->lecturer_approval == "accepted" && $_request->admin_approval == "accepted")
+            <div class="alert alert-success">
+              Since the project has been approved by both entities, it can only be open by the administration
+            </div>
+          @else
+            <button href="#" class="btn btn-success font-size-16 py-1 px-4" data-toggle="modal"
+              data-target="#reopenRequestModal">
+              <i class="uil uil-check"></i> Reopen the request
+            </button>
+          @endif
+        @endrole
       </div>
     @endif
   </div>
@@ -113,7 +151,13 @@
         <div class="modal-footer">
 
           <button type="button" class="btn btn-primary" data-dismiss="modal">Cancel</button>
-          <form action="{{ route("request.feedback") }}" method="POST">
+          <form @role("admin")
+              action="{{ route("request.feedback") }}" 
+            @endrole
+            @role("lecturer")
+              action="{{ route("request.lecturer.feedback") }}" 
+            @endrole
+            method="POST">
             @csrf
             <input type="hidden" name="id" value="{{ $_request->id }}">
             <input type="hidden" name="feedback" value="accepted" />
@@ -140,7 +184,13 @@
         <div class="modal-footer">
 
           <button type="button" class="btn btn-primary" data-dismiss="modal">Cancel</button>
-          <form action="{{ route("request.feedback") }}" method="POST">
+          <form @role("admin")
+              action="{{ route("request.feedback") }}" 
+            @endrole
+            @role("lecturer")
+              action="{{ route("request.lecturer.feedback") }}" 
+            @endrole
+            method="POST">
             @csrf
             <input type="hidden" name="id" value="{{ $_request->id }}">
             <input type="hidden" name="feedback" value="rejected">
@@ -168,7 +218,13 @@
         <div class="modal-footer">
 
           <button type="button" class="btn btn-primary" data-dismiss="modal">Cancel</button>
-          <form action="{{ route("request.feedback") }}" method="POST">
+          <form @role("admin")
+              action="{{ route("request.feedback") }}" 
+            @endrole
+            @role("lecturer")
+              action="{{ route("request.lecturer.feedback") }}" 
+            @endrole
+            method="POST">
             @csrf
             <input type="hidden" name="id" value="{{ $_request->id }}">
             <input type="hidden" name="feedback" value="pending">

@@ -51,17 +51,17 @@
             <div class="media p-3">
               <div class="media-body d-flex justify-content-between align-items-center">
                 <h2 class="mb-0 text-capitalize text-white" style="cursor: pointer"
-                  onclick='showDetailsModal(@json($_request->topic), @json($_request->lecturer_id), @json($_request->admin_approval), @json($_request->lecturer_approval), @json($_request->proposal_url), @json($_request->student_id), @json($_request->description))'>
+                  onclick='showDetailsModal(@json($_request->topic), @json($_request->lecturer->name), @json($_request->admin_approval), @json($_request->lecturer_approval), @json($_request->proposal_url), @json($_request->student_id), @json($_request->description))'>
                   {{ $_request->topic }}
                 </h2>
                 <div>
-                  <button href="#" class="btn btn-info font-size-11 p-1" onclick= 'editStudentModal()'>
+                  {{-- <button href="#" class="btn btn-info font-size-11 p-1" onclick= 'editStudentModal()'>
                     <i class="uil uil-edit-alt"></i>
                   </button>
 
                   <button href="#" class="btn btn-danger font-size-11 p-1" onclick='showDeleteModal()'>
                     <i class="uil uil-trash"></i>
-                  </button>
+                  </button> --}}
                 </div>
               </div>
             </div>
@@ -164,11 +164,11 @@
               <div class="media p-3">
                 <div class="media-body d-flex justify-content-between align-items-center">
                   <h2 class="mb-0 text-capitalize text-white" style="cursor: pointer"
-                    onclick='showDetailsModal(@json($_request->topic), @json($_request->lecturer_id), @json($_request->admin_approval), @json($_request->lecturer_approval), @json($_request->proposal_url))'>
-                    {{ $_request->topic }}
+                    onclick='showDetailsModal(@json($_request->topic), @json($_request->student->name), @json($_request->admin_approval), @json($_request->lecturer_approval), @json($_request->proposal_url), @json($_request->description))'>
+                    {{ $_request->student->name }}
                   </h2>
                   <div>
-                    <button href="#" class="btn btn-info font-size-11 p-1"
+                    {{-- <button href="#" class="btn btn-info font-size-11 p-1"
                       onclick= 'editProposalModal(@json($_request->id), @json($_request->topic), @json($_request->description), @json($_request->lecturer_id))'>
                       <i class="uil uil-edit-alt"></i>
                     </button>
@@ -177,7 +177,7 @@
                       onclick='showDeleteModal(@json($_request->id))'>
 
                       <i class="uil uil-trash"></i>
-                    </button>
+                    </button> --}}
                   </div>
                 </div>
               </div>
@@ -196,5 +196,67 @@
         </div>
       @endforeach
     </div>
+
+    {{-- Request Details Modal --}}
+    <div class="modal fade" id="requestDetails" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Request </h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+
+            {{-- Name --}}
+            <p class="d-flex justify-content-between">
+              <span class="font-weight-bold">Topic</span>
+              <span id="topic"></span>
+            </p>
+
+            {{-- Lecturer --}}
+            <p class="d-flex justify-content-between">
+              <span class="font-weight-bold">Student</span>
+              <span id="student"></span>
+            </p>
+
+            {{-- Status --}}
+            <p class="d-flex justify-content-between">
+              <span class="font-weight-bold">Status</span>
+              <span id="approved"></span>
+            </p>
+
+            {{-- Description --}}
+            <p id="description"></p>
+            {{-- Proposal documet --}}
+            <a href="" target="_blank" id="file">View the proposal document</a>
+          </div>
+          <div class="modal-footer justify-content-center">
+            <button type="button" class="btn btn-info w-50" data-dismiss="modal">Close</button>
+            <a id="requestSingle" class="btn btn-info w-50 text-white" target="_blank">Give Feedback</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      function showDetailsModal(topic, student, adminApproval, lecturerApproval, file, description) {
+        document.getElementById('topic').innerHTML = topic;
+        document.getElementById('student').innerHTML = student;
+        document.getElementById('description').innerHTML = description;
+        if (adminApproval == 'pending' || lecturerApproval == 'pending') {
+          document.getElementById('approved').innerHTML = "Pending";
+        } else if (adminApproval == 'rejected' || lecturerApproval == 'rejected') {
+          document.getElementById('approved').innerHTML = "Rejected";
+        } else {
+          document.getElementById('approved').innerHTML = "Accepted";
+        }
+        document.getElementById('file').href =
+          '{{ asset("storage/" . base64_decode($_request->proposal_url)) }}';
+        document.getElementById('requestSingle').href = '{{ route("request.showByRequestId", $_request->id) }}'
+        $("#requestDetails").modal('show');
+      }
+    </script>
   @endsection
 @endrole

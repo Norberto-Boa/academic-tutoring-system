@@ -28,4 +28,8 @@ class LecturerStudent extends Model
     'topic',
     'proposal_url'
   ];
+
+  public function lecturer() {
+    
+  }
 }

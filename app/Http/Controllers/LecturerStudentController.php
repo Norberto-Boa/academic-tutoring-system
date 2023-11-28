@@ -18,19 +18,23 @@ class LecturerStudentController extends Controller
     $projects = LecturerStudent::all();
     $students = User::role('student')->get();
     $lecturers = User::role('lecturer')->get();
-    dd(Auth::user()->isTutoring);
 
     return response(view('projects.list', compact('projects', 'lecturers', 'students')));
   }
 
 
   /**
-   * Store a newly created resource in storage.
+   * Show a single project
+   * @param integer $id
+   * @param \Illuminate\Http\Response
    */
-  public function store(Request $request)
+  public function show(int $id)
   {
-    //
+    $project = LecturerStudent::find($id);
+
+    return response(view('projects.single', compact('project')));
   }
+
 
   /**
    * Update the specified resource in storage.

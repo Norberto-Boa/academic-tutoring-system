@@ -44,12 +44,12 @@
               <div class="media p-3">
                 <div class="media-body d-flex justify-content-between align-items-center">
                   @php
-                    $studentName = $students->find($project->student_id)->name;
-                    $lecturerName = $lecturers->find($project->lecturer_id)->name;
+                    $studentName = $project->student->name;
+                    $lecturerName = $project->lecturer->name;
                   @endphp
                   <h2 class="mb-0 text-capitalize" style="cursor: pointer"
                     onclick='showDetailsModal({{ $project->id }}, @json($project->topic), @json($studentName), @json($lecturerName))'>
-                    {{ $students->find($project->student_id)->name }}</h2>
+                    {{ $studentName }}</h2>
                   <div>
                     {{-- <button href="#" class="btn btn-info font-size-11 p-1"
                     onclick= 'editlecturerModal({{ $lecturer->id }},@json($lecturer->name),@json($lecturer->email),@json($lecturer->phone_number))'>
@@ -86,26 +86,27 @@
             </div>
             <div class="modal-body">
 
-              {{-- Name --}}
+              {{-- Topic --}}
               <p class="d-flex justify-content-between">
                 <span class="font-weight-bold">Topic</span>
                 <span id="projectTopic"></span>
               </p>
 
-              {{-- Email --}}
+              {{-- Student Name --}}
               <p class="d-flex justify-content-between">
                 <span class="font-weight-bold">Student Name</span>
                 <span id="stuName"></span>
               </p>
 
-              {{-- Phone Number --}}
+              {{-- lecturer Name --}}
               <p class="d-flex justify-content-between">
                 <span class="font-weight-bold">Lecturer Name</span>
                 <span id="lecName"></span>
               </p>
             </div>
             <div class="modal-footer justify-content-center">
-              <button type="button" class="btn btn-info w-50" data-dismiss="modal">Close</button>
+              <a id="proposalUrl" class="btn btn-info w-50" target="_blank">View Proposal</a>
+              <a id="detailUrl" class="btn btn-dark text-white w-50" target="_blank">View Details</a>
             </div>
           </div>
         </div>
@@ -197,10 +198,12 @@
     <script>
       function showDetailsModal(projectId, projectTopic, studentName, lecturerName) {
         document.getElementById('title').innerHTML = studentName +
-          ' final project';
+          "'s Final Project";
         document.getElementById('projectTopic').innerHTML = projectTopic;
         document.getElementById('stuName').innerHTML = studentName;
         document.getElementById('lecName').innerHTML = lecturerName;
+        document.getElementById('proposalUrl').href = '{{ asset("storage/" . base64_decode($project->proposal_url)) }}';
+        document.getElementById('detailUrl').href = '{{ route("projects.show", $project->id) }}';
         $("#projectDetails").modal('show');
       }
 

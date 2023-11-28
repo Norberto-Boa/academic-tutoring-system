@@ -44,10 +44,16 @@
 @role("student")
   @section("content")
     @if (!Auth::user()->hasProject->isEmpty())
-      @foreach (Auth::user()->hasProject as $project)
-        <p>{{ $project->topic }}</p>
-      @endforeach
-      <p>Done Topic</p>
+      <div class="row">
+        <div class="col-12">
+          <h2>{{ Auth::user()->project->topic }}</h2>
+        </div>
+        <div class="col-12">
+          <a href="{{ asset("storage/" . base64_decode(Auth::user()->project->proposal_url)) }}" class="btn btn-info"
+            target="_blank">Open
+            Proposal</a>
+        </div>
+      </div>
     @elseif (!Auth::user()->hasRequest->isEmpty())
       @foreach (Auth::user()->hasRequest as $_request)
         <div class="col-md-3 col xl-3">

@@ -46,6 +46,11 @@ class User extends Authenticatable
     'password' => 'hashed',
   ];
 
+
+  public function project()
+  {
+    return $this->hasOne(LecturerStudent::class, "student_id", "id");
+  }
   public function hasProject()
   {
     return $this->hasMany(LecturerStudent::class, "student_id", "id");

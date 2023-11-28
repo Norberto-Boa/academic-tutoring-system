@@ -42,6 +42,7 @@ Route::middleware(['auth'])->group(function () {
 
   // Projects Controller
   Route::get('/projects/list', [LecturerStudentController::class, 'index'])->name('projects.list');
+  Route::get('/project/{id}', [LecturerStudentController::class, 'show'])->name('projects.show');
 
   //Request Controller
   Route::get('/request', [RequestsController::class, 'index'])->name('request.list');

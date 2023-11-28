@@ -29,7 +29,18 @@ class LecturerStudent extends Model
     'proposal_url'
   ];
 
-  public function lecturer() {
-    
+  public function lecturer()
+  {
+    return $this->hasOne(User::class, 'id', 'lecturer_id');
+  }
+
+  public function student()
+  {
+    return $this->hasOne(User::class, 'id', 'student_id');
+  }
+
+  public function posts()
+  {
+    return $this->hasMany(Post::class, 'lecturer_student_id');
   }
 }

@@ -15,7 +15,7 @@ class Post extends Model
     'title',
     'description',
     'document_url',
-    'lecturer_student_id'
+    'student_lecturer_id'
   ];
 
   public function project()

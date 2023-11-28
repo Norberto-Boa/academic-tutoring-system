@@ -3,6 +3,7 @@
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LecturerController;
 use App\Http\Controllers\LecturerStudentController;
+use App\Http\Controllers\PostController;
 use App\Http\Controllers\RequestsController;
 use App\Http\Controllers\StudentController;
 use App\Models\LecturerStudent;
@@ -51,6 +52,11 @@ Route::middleware(['auth'])->group(function () {
   Route::post('/request/update', [RequestsController::class, 'update'])->name('request.update');
   Route::post('/request/feedback', [RequestsController::class, 'adminApproval'])->name('request.feedback');
   Route::post('/request/lecturer/feedback', [RequestsController::class, 'lecturerFeedback'])->name('request.lecturer.feedback');
+
+  // Post Controller
+  Route::post('/post/create', [PostController::class, 'store'])->name('post.store');
+  Route::post('/post/delete', [PostController::class, 'destroy'])->name('post.destroy');
+  Route::post('/post/update', [PostController::class, 'update'])->name('post.update');
 });
 
 Auth::routes();

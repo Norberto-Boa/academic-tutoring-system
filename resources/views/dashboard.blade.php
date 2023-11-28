@@ -43,17 +43,227 @@
 
 @role("student")
   @section("content")
+    {{-- Check if it has Projects --}}
     @if (!Auth::user()->hasProject->isEmpty())
       <div class="row">
+        {{-- Project Topic --}}
         <div class="col-12">
           <h2>{{ Auth::user()->project->topic }}</h2>
         </div>
+        {{-- View Project Proposal pdf --}}
         <div class="col-12">
           <a href="{{ asset("storage/" . base64_decode(Auth::user()->project->proposal_url)) }}" class="btn btn-info"
             target="_blank">Open
             Proposal</a>
         </div>
       </div>
+      {{-- Divider Line --}}
+      <div style="height: 2px" class="bg-white rounded w-100 mb-4 mt-4"></div>
+
+      {{-- List Posts --}}
+      <div class="row">
+        <div class="col-12">
+          <div class="h2">Posts</div>
+        </div>
+
+        @php
+          $project = Auth::user()->project;
+        @endphp
+
+        @if (!$project->posts->isEmpty())
+          @foreach (Auth::user()->project->posts as $post)
+            <div class="col-12 mt-2">
+              <div class=" py-1 px-4 border border-secondary rounded d-flex justify-content-between align-items-center">
+                <div>
+                  <a href="" class="font-size-22 text-secondary">{{ $post->title }}</a>
+                </div>
+
+                <div>
+                  <button href="#" class="btn btn-info font-size-15 p-1"
+                    onclick= 'editPostModal(@json($post->id), @json($post->title), @json($post->description))'>
+                    <i class="uil uil-edit-alt"></i>
+                  </button>
+
+                  <button href="#" class="btn btn-danger font-size-15 p-1"
+                    onclick='deletePostModal(@json($post->id), @json($post->title))'>
+                    <i class="uil uil-trash"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          @endforeach
+
+          {{-- Edit Modal --}}
+          <div class="modal fade" id="editPostModal" tabindex="-1" aria-labelledby="projectTopic" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+              <div class="modal-content">
+                <div class="modal-header">
+                  {{-- Modal Title --}}
+                  <h5 class="modal-title" id="projectTopic">Edit <span id="Title"></span></h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  {{-- Modal Form --}}
+                  <form action="{{ route("post.update") }}" method="post" enctype="multipart/form-data">
+                    @csrf
+
+                    {{-- Project ID --}}
+                    <input type="hidden" name="id" id="postId">
+
+                    {{-- Title Input --}}
+                    <div class="form-group">
+                      <label for="title">Title</label>
+                      <input type="text" class="form-control" name="title" id="editTitle"
+                        placeholder="Example: John Doe">
+                    </div>
+
+                    {{-- Description Input --}}
+                    <div class="form-group row">
+                      <label class="col-lg-4 col-form-label" for="editDescription">Description</label>
+                      <div class="col-lg-12">
+                        <textarea class="form-control" rows="5" name="description" id="editDescription"
+                          placeholder="Write at maximum 200 words."></textarea>
+                      </div>
+                    </div>
+
+                    {{-- File Input --}}
+                    <div class="form-group row">
+                      <div class="col-lg-12">
+                        <input type="file" name="document" class="form-control-file" id="fileInput">
+                        <small>Upload even if it is the same file!</small>
+                      </div>
+                    </div>
+
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                      <button type="submit" class="btn btn-primary">Edit Post</button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {{-- Delete Modal --}}
+          <div class="modal fade" id="deletePostModal" tabindex="-1" aria-labelledby="deletePostModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="deletePostModalLabel">Delete <span id="postTitle"></span></h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <p>You sure you want to delete the proposal?</p>
+                </div>
+                <div class="modal-footer">
+
+                  <button type="button" class="btn btn-primary" data-dismiss="modal">Cancel</button>
+                  <form action="{{ route("post.destroy") }}" method="POST" id="deleteForm">
+                    @csrf
+                    <input type="hidden" name="id" id="deleteId">
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <script>
+            function editPostModal(postId, title, description) {
+
+              document.getElementById('Title').innerHTML = title;
+              document.getElementById('postId').value = postId;
+              document.getElementById('editTitle').value = title;
+              document.getElementById('editDescription').value = description;
+              $('#editPostModal').modal('show');
+            }
+
+            function deletePostModal(postId, title) {
+              document.getElementById('postTitle').innerHTML = title;
+              document.getElementById('deleteId').value = postId;
+              $('#deletePostModal').modal('show');
+            }
+          </script>
+        @else
+          <div class="col-12">
+            <div class="alert alert-danger w-25">
+              You do not have a post yet!
+            </div>
+          </div>
+        @endif
+        <div class="col-12 mt-2">
+          <a href="#" class="btn btn-dark" onclick="createPostModal()">
+            <i data-feather="plus"></i>
+            Create a Post
+          </a>
+        </div>
+      </div>
+
+      {{-- Create Post Modal --}}
+      <div class="modal fade" id="createPostModal" tabindex="-1" aria-labelledby="projectTopic" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              {{-- Modal Title --}}
+              <h5 class="modal-title" id="projectTopic">Create Post for {{ $project->topic }}</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              {{-- Modal Form --}}
+              <form action="{{ route("post.store") }}" method="POST" enctype="multipart/form-data">
+                @csrf
+
+                {{-- Project ID --}}
+                <input type="hidden" name="projectId" value="{{ $project->id }}">
+
+                {{-- Title Input --}}
+                <div class="form-group">
+                  <label for="title">Title</label>
+                  <input type="text" class="form-control" name="title" id="title"
+                    placeholder="Example: John Doe">
+                </div>
+
+                {{-- Description Input --}}
+                <div class="form-group row">
+                  <label class="col-lg-4 col-form-label" for="description">Description</label>
+                  <div class="col-lg-12">
+                    <textarea class="form-control" rows="5" name="description" id="description"
+                      placeholder="Write at maximum 200 words."></textarea>
+                  </div>
+                </div>
+
+                {{-- File Input --}}
+                <div class="form-group row">
+                  <div class="col-lg-12">
+                    <input type="file" name="document" class="form-control-file" id="fileInput">
+                    <small>Upload even if it is the same file!</small>
+                  </div>
+                </div>
+
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                  <button type="submit" class="btn btn-primary">Create Post</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <script>
+        function createPostModal() {
+          $('#createPostModal').modal('show');
+        }
+      </script>
+
+      {{-- Check if it has proposals  --}}
     @elseif (!Auth::user()->hasRequest->isEmpty())
       @foreach (Auth::user()->hasRequest as $_request)
         <div class="col-md-3 col xl-3">
@@ -160,7 +370,8 @@
                 {{-- Topic Input --}}
                 <div class="form-group">
                   <label for="editTopic">Topic</label>
-                  <input type="text" class="form-control" name="topic" id="editTopic" placeholder="Example: John Doe">
+                  <input type="text" class="form-control" name="topic" id="editTopic"
+                    placeholder="Example: John Doe">
                 </div>
 
                 {{-- Lecturer Input --}}
@@ -177,7 +388,7 @@
                 </div>
 
                 <div class="form-group row">
-                  <label class="col-lg-4 col-form-label" for="editDescription">Description</label>
+                  <label class="col-lg-4 col-form-label" for="description">Description</label>
                   <div class="col-lg-12">
                     <textarea class="form-control" rows="5" name="description" id="editDescription"
                       placeholder="Write at maximum 200 words."></textarea>

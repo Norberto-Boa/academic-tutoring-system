@@ -41,6 +41,6 @@ class LecturerStudent extends Model
 
   public function posts()
   {
-    return $this->hasMany(Post::class, 'lecturer_student_id');
+    return $this->hasMany(Post::class, 'student_lecturer_id');
   }
 }

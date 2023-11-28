@@ -59,80 +59,86 @@
     </div>
 
 
-    @if ($_request->lecturer_approval == "pending")
-      <div class="col-12 mt-4">
-        <button href="#" class="btn btn-success font-size-16 py-1 px-4" data-toggle="modal"
-          data-target="#acceptanceModal">
-          <i class="uil uil-check"></i> Accept
-        </button>
+    @role("admin")
+      @if ($_request->admin_approval == "pending")
+        <div class="col-12 mt-4">
+          <button href="#" class="btn btn-success font-size-16 py-1 px-4" data-toggle="modal"
+            data-target="#acceptanceModal">
+            <i class="uil uil-check"></i> Accept
+          </button>
 
-        <button href="#" class="btn btn-danger font-size-16 py-1 px-4 ml-2" data-toggle="modal"
-          data-target="#rejectModal">
-          <i class="uil uil-ban"></i> Reject
-        </button>
-      </div>
-    @elseif ($_request->lecturer_approval == "accepted" && $_request->admin_approval == "accepted")
-      <div class="col-12 col-md-4 mt-4">
-        <div class="alert alert-info text-center font-bold">
-          @role("admin")
+          <button href="#" class="btn btn-danger font-size-16 py-1 px-4 ml-2" data-toggle="modal"
+            data-target="#rejectModal">
+            <i class="uil uil-ban"></i> Reject
+          </button>
+        </div>
+      @elseif ($_request->admin_approval == "accepted")
+        <div class="col-12 col-md-4 mt-4">
+          <div class="alert alert-info text-center font-bold">
             {{ "The Proposal has been Accepted by the administration and Lecturer" }}
-          @endrole
-          @role("lecturer")
-            {{ "You have Accepted the project from this student" }}
-          @endrole
+          </div>
         </div>
-      </div>
-    @elseif ($_request->lecturer_approval == "accepted" && $_request->admin_approval == "pending")
-      <div class="col-12 col-md-4 mt-4">
-        <div class="alert alert-info text-center font-bold">
-          @role("admin")
-            {{ "The Project has been Accepted by the administration" }}
-          @endrole
-          @role("lecturer")
-            {{ "You have Accepted the project from this student!" }}
-          @endrole
-        </div>
-      </div>
-      <div class="col-12 mt-4">
-        <button href="#" class="btn btn-success font-size-16 py-1 px-4" data-toggle="modal"
-          data-target="#reopenRequestModal">
-          <i class="uil uil-check"></i> Reopen the request
-        </button>
-      </div>
-    @elseif($_request->lecturer_approval == "rejected")
-      <div class="col-12 col-md-4 mt-4">
-        <div class="alert alert-danger text-center font-bold">
-          @role("admin")
-            {{ "The Project has been Rejected by the administration" }}
-          @endrole
-          @role("lecturer")
-            {{ "You have Rejected the project from this student!" }}
-          @endrole
-        </div>
-      </div>
-      <div class="col-12 mt-4">
 
-        @role("admin")
+        <div class="col-12 mt-4">
           <button href="#" class="btn btn-success font-size-16 py-1 px-4" data-toggle="modal"
             data-target="#reopenRequestModal">
             <i class="uil uil-check"></i> Reopen the request
           </button>
-        @endrole
+        </div>
+      @elseif ($_request->admin_approval == "rejected")
+        <div class="col-12 col-md-4 mt-4">
+          <div class="alert alert-danger text-center font-bold">
+            {{ "The Proposal has been rejected by the administration and Lecturer" }}
+          </div>
+        </div>
+      @endif
+    @endrole
 
-        @role("lecturer")
-          @if ($_request->lecturer_approval == "accepted" && $_request->admin_approval == "accepted")
-            <div class="alert alert-success">
-              Since the project has been approved by both entities, it can only be open by the administration
-            </div>
-          @else
-            <button href="#" class="btn btn-success font-size-16 py-1 px-4" data-toggle="modal"
-              data-target="#reopenRequestModal">
-              <i class="uil uil-check"></i> Reopen the request
-            </button>
-          @endif
-        @endrole
-      </div>
-    @endif
+    @role("lecturer")
+      @if ($_request->lecturer_approval == "pending")
+        <div class="col-12 mt-4">
+          <button href="#" class="btn btn-success font-size-16 py-1 px-4" data-toggle="modal"
+            data-target="#acceptanceModal">
+            <i class="uil uil-check"></i> Accept
+          </button>
+
+          <button href="#" class="btn btn-danger font-size-16 py-1 px-4 ml-2" data-toggle="modal"
+            data-target="#rejectModal">
+            <i class="uil uil-ban"></i> Reject
+          </button>
+        </div>
+      @elseif ($_request->lecturer_approval == "accepted" && $_request->admin_approval == "accepted")
+        <div class="col-12 col-md-4 mt-4">
+          <div class="alert alert-info text-center font-bold">
+            {{ "You have Accepted the project from this student" }}
+          </div>
+        </div>
+      @elseif ($_request->lecturer_approval == "accepted" && $_request->admin_approval == "pending")
+        <div class="col-12 col-md-4 mt-4">
+          <div class="alert alert-info text-center font-bold">
+            {{ "You have Accepted the project from this student!" }}
+          </div>
+        </div>
+        <div class="col-12 mt-4">
+          <button href="#" class="btn btn-success font-size-16 py-1 px-4" data-toggle="modal"
+            data-target="#reopenRequestModal">
+            <i class="uil uil-check"></i> Reopen the request
+          </button>
+        </div>
+      @elseif($_request->lecturer_approval == "rejected")
+        <div class="col-12 col-md-4 mt-4">
+          <div class="alert alert-danger text-center font-bold">
+            {{ "You have Rejected the project from this student!" }}
+          </div>
+        </div>
+        <div class="col-12 mt-4">
+          <button href="#" class="btn btn-success font-size-16 py-1 px-4" data-toggle="modal"
+            data-target="#reopenRequestModal">
+            <i class="uil uil-check"></i> Reopen the request
+          </button>
+        </div>
+      @endif
+    @endrole
   </div>
 
   {{-- Acceptance Modal --}}

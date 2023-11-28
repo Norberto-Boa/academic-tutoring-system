@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\LecturerStudent;
 use App\Models\Requests;
 use App\Models\User;
 use App\Notifications\StudentRequestToAdmin;
@@ -132,6 +133,18 @@ class RequestsController extends Controller
     if ($feedback == "accepted") {
       $_request->admin_approval = 'accepted';
       $_request->update();
+      // Create a new project if the lecturer has already accepted the proposal
+      if ($_request->lecturer_approval == "accepted") {
+        $project = new LecturerStudent();
+
+        $project->lecturer_id = $_request->lecturer_id;
+        $project->student_id = $_request->student_id;
+        $project->topic = $_request->topic;
+        $project->proposal_url = $_request->proposal_url;
+        $project->save();
+
+        return redirect()->back()->with('success', 'Project accepted and created!');
+      }
       return redirect()->back()->with('success', 'You have answered the request from the student!');
     } else if ($feedback == "rejected") {
       $_request->admin_approval = 'rejected';
@@ -174,6 +187,19 @@ class RequestsController extends Controller
     if ($feedback == "accepted") {
       $_request->lecturer_approval = 'accepted';
       $_request->update();
+
+      // Create a new project if the administration has already accepted the proposal
+      if ($_request->admin_approval == "accepted") {
+        $project = new LecturerStudent();
+
+        $project->lecturer_id = $_request->lecturer_id;
+        $project->student_id = $_request->student_id;
+        $project->topic = $_request->topic;
+        $project->proposal_url = $_request->proposal_url;
+        $project->save();
+
+        return redirect()->back()->with('success', 'Project accepted and created!');
+      }
       return redirect()->back()->with('success', 'You have answered the request from the student!');
     } else if ($feedback == "rejected") {
       $_request->lecturer_approval = 'rejected';

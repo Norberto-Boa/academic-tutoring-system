@@ -46,16 +46,32 @@
       </div>
       <div class="col-12 mt-4">
         <h5>Comments</h5>
-
-        <div class="row flex-col">
-          <div class="col-12 col-md-6 bg-white px-4 py-2 rounded">
-            <small class="font-size-12 font-weight-bold mb-1">Norberto Boa</small>
-            <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Repellat ea exercitationem qui, cum hic consequatur
-              quidem totam eius doloremque delectus!
-            </p>
-            <small class="font-size-10 text-muted float-right ">Friday, 13 November 2023</small>
+        <form action="{{ route("comment.store") }}" method="POST">
+          @csrf
+          <div class="row mt-4 mb-4">
+            <div class="col-6">
+              <textarea class="form-control w-100 m-0" rows="2" name="content" id="content" placeholder="Write a new comment"></textarea>
+            </div>
+            <div class="col-12 col-md-6 mt-2">
+              <input type="hidden" name="post_id" value={{ $post->id }}>
+              <button type="submit" class="btn btn-secondary">Comment</button>
+            </div>
           </div>
+        </form>
+
+        {{-- List comments --}}
+        <div class="row flex-col">
+          @foreach ($post->comments as $comment)
+            <div class="col-12 col-md-6 bg-white px-4 py-2 rounded mb-2">
+
+              <small class="font-size-12 font-weight-bold mb-1">{{ $comment->commenter->name }}</small>
+              <p>{{ $comment->content }}</p>
+              <small class="font-size-10 text-muted float-right ">{{ $comment->created_at }}</small>
+            </div>
+          @endforeach
         </div>
+
+
       </div>
     </div>
   @endrole

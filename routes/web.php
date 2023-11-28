@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LecturerController;
 use App\Http\Controllers\LecturerStudentController;
@@ -58,6 +59,9 @@ Route::middleware(['auth'])->group(function () {
   Route::post('/post/delete', [PostController::class, 'destroy'])->name('post.destroy');
   Route::post('/post/update', [PostController::class, 'update'])->name('post.update');
   Route::get('post/{id}', [PostController::class, 'show'])->name('post.show');
+
+  // Comment Controller
+  Route::post('/comment/create', [CommentController::class, 'store'])->name('comment.store');
 });
 
 Auth::routes();

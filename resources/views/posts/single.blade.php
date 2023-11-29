@@ -35,17 +35,20 @@
 @endsection
 
 @section("content")
-  @role("student")
-    <div class="row">
-      <div class="col-12">
-        <div class="d-flex justify-content-between align-items-center">
-          <h3>{{ $post->title }}</h3>
-          <a href="{{ asset("storage/" . base64_decode($post->document_url)) }}" target="_blank" class="btn btn-info">View
-            document</a>
-        </div>
+  <div class="row">
+    <div class="col-12">
+      <div class="d-flex justify-content-between align-items-center">
+        <h3>{{ $post->title }}</h3>
+        <a href="{{ asset("storage/" . base64_decode($post->document_url)) }}" target="_blank" class="btn btn-info">View
+          document</a>
       </div>
-      <div class="col-12 mt-4">
-        <h5>Comments</h5>
+    </div>
+
+    {{-- Line Divider  --}}
+    <div style="height: 2px" class="bg-white rounded w-100 mt-4"></div>
+    <div class="col-12 mt-4">
+      <h5>Comments</h5>
+      @role("student|lecturer")
         <form action="{{ route("comment.store") }}" method="POST">
           @csrf
           <div class="row mt-4 mb-4">
@@ -58,21 +61,25 @@
             </div>
           </div>
         </form>
+      @endrole
+      {{-- List comments --}}
+      <div class="row flex-col">
+        @foreach ($post->comments->sortByDesc("created_at") as $comment)
+          <div class="col-12 col-md-6 bg-white px-4 py-2 rounded mb-2 ml-3">
 
-        {{-- List comments --}}
-        <div class="row flex-col">
-          @foreach ($post->comments as $comment)
-            <div class="col-12 col-md-6 bg-white px-4 py-2 rounded mb-2">
-
+            <div>
               <small class="font-size-12 font-weight-bold mb-1">{{ $comment->commenter->name }}</small>
-              <p>{{ $comment->content }}</p>
-              <small class="font-size-10 text-muted float-right ">{{ $comment->created_at }}</small>
+              @if ($comment->commenter->id == Auth::user()->id)
+                <small class="float-right">Delete</small>
+              @endif
             </div>
-          @endforeach
-        </div>
-
-
+            <p class="mb-1">{{ $comment->content }}</p>
+            <small class="font-size-10 text-muted float-right">{{ $comment->created_at }}</small>
+          </div>
+        @endforeach
       </div>
+
+
     </div>
-  @endrole
+  </div>
 @endsection

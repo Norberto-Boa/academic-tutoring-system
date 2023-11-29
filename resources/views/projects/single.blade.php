@@ -52,5 +52,15 @@
       </div>
     </div>
     <div style="height: 2px" class="bg-white rounded w-100 mb-4 mt-4"></div>
+    <div class="row">
+      <div class="col-12">
+        <h3>Posts</h3>
+      </div>
+      @foreach ($project->posts as $post)
+        <div class="col-12 bg-white border rounded">
+          <h4><a href="{{ route("post.show", $post->id) }}" class="text-secondary">{{ $post->title }}</a></h4>
+        </div>
+      @endforeach
+    </div>
   @endsection
 @endhasanyrole

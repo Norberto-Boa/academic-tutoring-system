@@ -34,7 +34,7 @@
   <div style="height: 2px" class="bg-white rounded w-100 mb-4"></div>
 @endsection
 
-@role("admin")
+@role("admin|lecturer")
   @section("content")
     <div class="row">
       @foreach ($projects as $project)
@@ -231,14 +231,6 @@
         $("#editlecturer").modal('show');
       }
     </script>
-  @endsection
-@endrole
-
-@role("lecturer")
-  @section("content")
-    @foreach (Auth::user()->isTutoring as $project)
-      <p>{{ $project->topic }}</p>
-    @endforeach
   @endsection
 @else
   @section("content")

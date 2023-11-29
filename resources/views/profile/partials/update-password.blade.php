@@ -4,7 +4,7 @@
     <p class="mt-2">Ensure yout acount is using a long, random password to stay secure.</p>
   </div>
 
-  <form action="" method="POST">
+  <form action="{{ route("password.update") }}" method="POST">
     @csrf
     @method("put")
 
@@ -21,7 +21,7 @@
 
     <div class="form-group">
       <label for="confirm_passowrd">Confirm New Password</label>
-      <input type="password" class="form-control" name="confirm_passowrd" id="confirm_passowrd"
+      <input type="password" class="form-control" name="password_confirmation" id="confirm_passowrd"
         placeholder="Confirm the new password">
     </div>
 

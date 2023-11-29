@@ -63,7 +63,7 @@
         </form>
       @endrole
       {{-- List comments --}}
-      <div class="row flex-col">
+      <div class="row flex-col slimScrollDiv">
         @foreach ($post->comments->sortByDesc("created_at") as $comment)
           <div class="col-12 col-md-6 bg-white px-4 py-2 rounded mb-2 ml-3">
 

@@ -1,5 +1,5 @@
 <ul class="metismenu" id="menu-bar">
-  <li class="menu-title">Navigation</li>
+  <li class="menu-title">Everybody</li>
 
   <li>
     <a href="{{ route("dashboard") }}">
@@ -9,15 +9,8 @@
     </a>
   </li>
 
-  <li>
-    <a href="/">
-      <i data-feather="home"></i>
-      <span> Posts </span>
-    </a>
-  </li>
-
   {{-- Dropdown --}}
-  <li>
+  {{-- <li>
     <a href="javascript: void(0);">
       <i data-feather="inbox"></i>
       <span> Email </span>
@@ -35,7 +28,7 @@
         <a href="/apps/email/compose">Compose</a>
       </li>
     </ul>
-  </li>
+  </li> --}}
 
   @if (Auth::user()->hasRole("lecturer"))
     <li class="menu-title">Administration</li>

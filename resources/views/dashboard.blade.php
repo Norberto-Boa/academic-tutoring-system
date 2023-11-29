@@ -44,17 +44,20 @@
 @role("student")
   @section("content")
     {{-- Check if it has Projects --}}
-    @if (!Auth::user()->hasProject->isEmpty())
+    @if (Auth::user()->project)
       <div class="row">
         {{-- Project Topic --}}
         <div class="col-12">
-          <h2>{{ Auth::user()->project->topic }}</h2>
-        </div>
-        {{-- View Project Proposal pdf --}}
-        <div class="col-12">
-          <a href="{{ asset("storage/" . base64_decode(Auth::user()->project->proposal_url)) }}" class="btn btn-info"
-            target="_blank">Open
-            Proposal</a>
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <small class="font-size-14 text-muted">Topic</small>
+              <h2>{{ Auth::user()->project->topic }}</h2>
+            </div>
+            {{-- View Project Proposal pdf --}}
+            <a href="{{ asset("storage/" . base64_decode(Auth::user()->project->proposal_url)) }}" class="btn btn-info"
+              target="_blank">Open
+              Proposal</a>
+          </div>
         </div>
       </div>
       {{-- Divider Line --}}
@@ -73,9 +76,11 @@
         @if (!$project->posts->isEmpty())
           @foreach (Auth::user()->project->posts as $post)
             <div class="col-12 mt-2">
-              <div class=" py-1 px-4 border border-secondary rounded d-flex justify-content-between align-items-center">
+              <div class="py-1 px-4 border border-secondary rounded d-flex justify-content-between align-items-center">
                 <div>
-                  <a href="{{ route("post.show", $post->id) }}" class="font-size-22 text-secondary">{{ $post->title }}</a>
+                  <a href="{{ route("post.show", $post->id) }}" class="font-size-22 text-secondary">{{ $post->title }}
+                    ({{ $post->comments->count() }})
+                  </a>
                 </div>
 
                 <div>

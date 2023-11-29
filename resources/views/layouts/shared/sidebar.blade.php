@@ -28,7 +28,7 @@
         <span data-feather="chevron-down"></span>
       </a>
       <div class="dropdown-menu profile-dropdown">
-        <a href="/pages/profile" class="dropdown-item notify-item">
+        <a href="{{ route("profile.edit") }}" class="dropdown-item notify-item">
           <i data-feather="user" class="icon-dual icon-xs mr-2"></i>
           <span>My Account</span>
         </a>

@@ -5,6 +5,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LecturerController;
 use App\Http\Controllers\LecturerStudentController;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RequestsController;
 use App\Http\Controllers\StudentController;
 use App\Models\LecturerStudent;
@@ -62,6 +63,9 @@ Route::middleware(['auth'])->group(function () {
 
   // Comment Controller
   Route::post('/comment/create', [CommentController::class, 'store'])->name('comment.store');
+
+  // Profile Controller
+  Route::get('profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
 });
 
 Auth::routes();

@@ -269,7 +269,7 @@
         <div class="col-md-3 col xl-3">
           <a
             @if (
-                ($_request->admin_approval == "pending" && $_request->lecturer_approval == "pending") ||
+                ($_request->admin_approval == "pending" && $_request->admin_approval == "pending") ||
                     ($_request->admin_approval == "accepted" && $_request->lecturer_approval == "pending") ||
                     ($_request->admin_approval == "pending" && $_request->lecturer_approval == "accepted")) class="card bg-primary text-white"
           @elseif ($_request->admin_approval == "rejected" || $_request->lecturer_approval == "rejected")
@@ -547,5 +547,165 @@
         </div>
       </div>
     @endif
+  @endsection
+@endrole
+
+@role("lecturer")
+  @section("content")
+    <div class="row">
+      {{-- Project cards --}}
+      <div class="col-md-6 col-xl-3">
+        <div class="card">
+          <div class="card-body p-0">
+            <div class="media p-3">
+              <div class="media-body">
+                <span class="text-info text-uppercase font-size-12 font-weight-bold">Ongoing</span>
+                <h2 class="mb-0">Projects</h2>
+              </div>
+              <div class="align-self-center">
+                <div id="today-revenue-chart" class="apex-charts"></div>
+                <span class="text-info font-weight-bold font-size-13">{{ Auth::user()->projects->count() }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {{-- Requests cards --}}
+      <div class="col-md-6 col-xl-3">
+        <div class="card">
+          <div class="card-body p-0">
+            <div class="media p-3">
+              <div class="media-body">
+                <span class="text-secondary text-uppercase font-size-12 font-weight-bold">Total</span>
+                <h2 class="mb-0">Requests</h2>
+              </div>
+              <div class="align-self-center">
+                <div id="today-revenue-chart" class="apex-charts"></div>
+                <span class="text-secondary font-weight-bold font-size-13">{{ Auth::user()->hasRequests->count() }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {{-- Accepted Requests cards --}}
+      <div class="col-md-6 col-xl-3">
+        <div class="card">
+          <div class="card-body p-0">
+            <div class="media p-3">
+              <div class="media-body">
+                <span class="text-success text-uppercase font-size-12 font-weight-bold">Accepted</span>
+                <h2 class="mb-0">Proposals</h2>
+              </div>
+              <div class="align-self-center">
+                <div id="today-revenue-chart" class="apex-charts"></div>
+                <span
+                  class="text-success font-weight-bold font-size-13">{{ count(Auth::user()->hasRequests->where("lecturer_approval", "accepted")->all()) }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {{-- Pending Requests cards --}}
+      <div class="col-md-6 col-xl-3">
+        <div class="card">
+          <div class="card-body p-0">
+            <div class="media p-3">
+              <div class="media-body">
+                <span class="text-warning text-uppercase font-size-12 font-weight-bold">Pending</span>
+                <h2 class="mb-0">Proposals</h2>
+              </div>
+              <div class="align-self-center">
+                <div id="today-revenue-chart" class="apex-charts"></div>
+                <span
+                  class="text-warning font-weight-bold font-size-13">{{ count(Auth::user()->hasRequests->where("lecturer_approval", "pending")->all()) }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  @endsection
+@endrole
+
+@role("admin")
+  @section("content")
+    <div class="row">
+      {{-- Project cards --}}
+      <div class="col-md-6 col-xl-3">
+        <div class="card">
+          <div class="card-body p-0">
+            <div class="media p-3">
+              <div class="media-body">
+                <span class="text-info text-uppercase font-size-12 font-weight-bold">Ongoing</span>
+                <h2 class="mb-0">Projects</h2>
+              </div>
+              <div class="align-self-center">
+                <div id="today-revenue-chart" class="apex-charts"></div>
+                <span class="text-info font-weight-bold font-size-13">{{ $projects->count() }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {{-- Requests cards --}}
+      <div class="col-md-6 col-xl-3">
+        <div class="card">
+          <div class="card-body p-0">
+            <div class="media p-3">
+              <div class="media-body">
+                <span class="text-secondary text-uppercase font-size-12 font-weight-bold">Total</span>
+                <h2 class="mb-0">Requests</h2>
+              </div>
+              <div class="align-self-center">
+                <div id="today-revenue-chart" class="apex-charts"></div>
+                <span class="text-secondary font-weight-bold font-size-13">{{ $_requests->count() }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {{-- Accepted Requests cards --}}
+      <div class="col-md-6 col-xl-3">
+        <div class="card">
+          <div class="card-body p-0">
+            <div class="media p-3">
+              <div class="media-body">
+                <span class="text-success text-uppercase font-size-12 font-weight-bold">Accepted</span>
+                <h2 class="mb-0">Proposals</h2>
+              </div>
+              <div class="align-self-center">
+                <div id="today-revenue-chart" class="apex-charts"></div>
+                <span
+                  class="text-success font-weight-bold font-size-13">{{ count($_requests->where("lecturer_approval", "accepted")->all()) }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {{-- Pending Requests cards --}}
+      <div class="col-md-6 col-xl-3">
+        <div class="card">
+          <div class="card-body p-0">
+            <div class="media p-3">
+              <div class="media-body">
+                <span class="text-warning text-uppercase font-size-12 font-weight-bold">Pending</span>
+                <h2 class="mb-0">Proposals</h2>
+              </div>
+              <div class="align-self-center">
+                <div id="today-revenue-chart" class="apex-charts"></div>
+                <span
+                  class="text-warning font-weight-bold font-size-13">{{ count($_requests->where("admin_approval", "pending")->all()) }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   @endsection
 @endrole

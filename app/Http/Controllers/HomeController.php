@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\LecturerStudent;
 use App\Models\Requests;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
@@ -27,12 +28,12 @@ class HomeController extends Controller
   {
     $user = Auth::user();
     $lecturers = User::role('lecturer')->get();
-
-    // Get the students requests!
-    $_requests = Requests::where('student_id', $user->id)->get();
+    $students = User::role('student')->get();
+    $_requests = Requests::all();
+    $projects = LecturerStudent::all();
 
     // dd($user->hasProject);
 
-    return view('dashboard', compact('user', 'lecturers', '_requests'));
+    return view('dashboard', compact('lecturers', '_requests', 'students', 'projects'));
   }
 }

@@ -51,9 +51,9 @@ class User extends Authenticatable
   {
     return $this->hasOne(LecturerStudent::class, "student_id", "id");
   }
-  public function hasProject()
+  public function projects()
   {
-    return $this->hasMany(LecturerStudent::class, "student_id", "id");
+    return $this->hasMany(LecturerStudent::class, "lecturer_id", "id");
   }
 
   public function hasRequest()
